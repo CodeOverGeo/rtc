@@ -41,12 +41,54 @@ class Stations(db.Model):
 
 
 class Reviews(db.Model):
-    pass
+    """Reviews model for rtc app"""
+
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    score = db.Column(db.Integer, nullable=False)
+
+    post = db.Column(db.Text, nullable=False)
+
+    created_date = db.Column(db.DateTime, nullable=False,
+                             default=datetime.datetime.utcnow)
+
+    updated_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    @property
+    def readable_date(self):
+        """Returns a user readable date"""
+
+        return self.created_at.strftime('%a %b %d %Y, %I:%M %p')
+
+    @property
+    def readable_date(self):
+        """Returns a user readable date"""
+
+        return self.updated_date.strftime('%a %b %d %Y, %I:%M %p')
 
 
 class Tags(db.Model):
-    pass
+    """Tag model for rtc app"""
+
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    tags = db.Column(db.String, nullable=False)
 
 
 class Station_Tags(db.Model):
-    pass
+    """Station to Tag joining model"""
+
+    __tablename__ = 'station_tags'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    station_id = db.Column(db.Integer, db.ForeignKey(
+        'stations.id'), nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
