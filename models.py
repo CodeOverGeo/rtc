@@ -25,6 +25,42 @@ class User(db.Model):
     date_joined = db.Column(db.DateTime, nullable=False,
                             default=datetime.utcnow())
 
+    @classmethod
+    def signup(cls, username, email, password, date_joined):
+        """Sign up user
+
+        Hashes password and adds user to system.
+        """
+
+        hashed_pwd = brcrypt.generate_password_hash(password).decode('UTF-8')
+
+        user = User(
+            username=username,
+            email=email,
+            password=hashed_pwd,
+            date_joined=date_joined,
+        )
+
+        db.session.add(user)
+        return user
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Authenticates user using username and hashed password
+
+        This user in found, return user object.
+        If username is not found or password is incorrect, return False
+        """
+
+        user = cls.query.filter_by(username=username).first()
+
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
+
+        return False
+
 
 class Stations(db.Model):
     """Station model for rtc app"""
@@ -52,9 +88,9 @@ class Reviews(db.Model):
     post = db.Column(db.Text, nullable=False)
 
     created_date = db.Column(db.DateTime, nullable=False,
-                             default=datetime.datetime.utcnow)
+                             default=datetime.utcnow)
 
-    updated_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    updated_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
@@ -92,3 +128,8 @@ class Station_Tags(db.Model):
         'stations.id'), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+
+def connect_db(app):
+    db.app = app
+    db.init_app(app)
