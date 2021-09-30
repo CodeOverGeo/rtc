@@ -7,6 +7,8 @@ from sqlalchemy.exc import IntegrityError
 from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, Stations, Reviews, Tags, Station_Tags
 
+import os
+
 CURR_USER_KEY = 'curr_user'
 
 app = Flask(__name__, static_url_path='/static')
@@ -14,7 +16,7 @@ app.config['SQLALCHEMY_DATABASE_URL'] = 'postgresql://rtc'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
-app.config['SECRET_KEY'] = 'Charger'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'Charger')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
 
