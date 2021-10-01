@@ -12,7 +12,8 @@ import os
 CURR_USER_KEY = 'curr_user'
 
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URL'] = 'postgresql://rtc'
+app.config['SQLALCHEMY_DATABASE_URL'] = os.environ.get(
+    'DATABASE_URL', 'postgresql://rtc')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
