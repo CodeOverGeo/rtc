@@ -13,6 +13,10 @@
   </head>
   <body class="{% block body_class %}{% endblock %}">
     <h1>Nav Bar placeholder</h1>
+    <div class="container">
+      {% for category, message in get_flashed_messages(with_categories=True) %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
     {% block content %} {% endblock %}
     <script src="https://unpkg.com/jquery"></script>
     <script src="https://unpkg.com/popper"></script>

@@ -104,7 +104,8 @@ def login():
             flash(f"Welcome, {user.username}!", 'success')
             return redirect('/')
 
-        flash('Username or password incorrect.', 'danger')
+        else:
+            flash('Username or password incorrect.', 'danger')
 
     return render_template('users/login.html', form=form)
 
