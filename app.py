@@ -12,8 +12,8 @@ import os
 CURR_USER_KEY = 'curr_user'
 
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URL'] = os.environ.get(
-    'DATABASE_URL', 'postgresql://rtc')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL', 'postgresql:///rtc')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
@@ -80,11 +80,11 @@ def signup():
 
         except IntegrityError:
             flash('Username already taken', 'danger')
-            return render_template('users/signup.html', form=form)
+            return redirect('users/signup.html', form=form)
 
         do_login(user)
 
-        return render_template('/charge/search.html')
+        return redirect('/search')
 
     else:
         return render_template('users/signup.html', form=form)
@@ -102,12 +102,23 @@ def login():
         if user:
             do_login(user)
             flash(f"Welcome, {user.username}!", 'success')
-            return render_template('charge/search.html')
+            return redirect('/search')
 
         else:
             flash('Username or password incorrect.', 'danger')
 
     return render_template('users/login.html', form=form)
+
+
+@app.route('/search')
+def search():
+    """Render main search page for chargers"""
+
+    if not g.user:
+        flash('Access unauthorized!', 'danger')
+        return redirect('/')
+
+    return render_template('charge/search.html')
 
 
 @app.route('/')
