@@ -84,7 +84,7 @@ def signup():
 
         do_login(user)
 
-        return redirect('/')
+        return render_template('/charge/search.html')
 
     else:
         return render_template('users/signup.html', form=form)
@@ -102,7 +102,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Welcome, {user.username}!", 'success')
-            return redirect('/')
+            return render_template('charge/search.html')
 
         else:
             flash('Username or password incorrect.', 'danger')

@@ -10,16 +10,26 @@
       rel="stylesheet"
       href="https://unpkg.com/bootstrap/dist/css/bootstrap.css"
     />
+    <link rel="stylesheet" href="/static/stylesheets/style.css" />
   </head>
   <body class="{% block body_class %}{% endblock %}">
     <h1>Nav Bar placeholder</h1>
     <div class="container">
       {% for category, message in get_flashed_messages(with_categories=True) %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% block content %} {% endblock %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %} {% block content %} {% endblock %}
+    </div>
     <script src="https://unpkg.com/jquery"></script>
     <script src="https://unpkg.com/popper"></script>
     <script src="https://unpkg.com/bootstrap"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDibstff_ItmrGuOHDU9ag28HY5VEcNts8&callback=initMap&v=weekly"
+      async
+    ></script>
+    <script src="/static/javascript/app.js"></script>
   </body>
 </html>
