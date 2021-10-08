@@ -2,15 +2,16 @@ const OPEN_MAP_API_KEY = 'e480c0a2-c3be-438b-90ea-db01e1d26c74';
 const GOOGLE_MAP_API_KEY = 'AIzaSyDibstff_ItmrGuOHDU9ag28HY5VEcNts8';
 
 let map;
-let marker;
+let homeMarker;
 let geocoder;
 let errorDiv;
 let response;
 let chargers = [];
+let chargerMarker;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 8,
+    zoom: 10,
     center: { lat: -34.397, lng: 150.644 },
     mapTypeControl: false,
   });
@@ -49,15 +50,21 @@ function initMap() {
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(clearButton);
   map.controls[google.maps.ControlPosition.LEFT_TOP].push(instructionsElement);
   map.controls[google.maps.ControlPosition.LEFT_TOP].push(errorDiv);
-  marker = new google.maps.Marker({
+
+  homeMarker = new google.maps.Marker({
     map,
   });
-  map.addListener('click', (e) => {
+  chargerMarker = new google.maps.Marker({
+    map,
+  });
+
+  map.addListener('click', async (e) => {
     geocode({ location: e.latLng });
   });
   submitButton.addEventListener('click', () =>
     geocode({ address: inputText.value })
   );
+
   clearButton.addEventListener('click', () => {
     clear();
   });
@@ -65,7 +72,8 @@ function initMap() {
 }
 
 function clear() {
-  marker.setMap(null);
+  homeMarker.setMap(null);
+  chargers = [];
   errorDiv.style.display = 'none';
 }
 
@@ -76,14 +84,16 @@ function geocode(request) {
     .then((result) => {
       const { results } = result;
       map.setCenter(results[0].geometry.location);
-      marker.setPosition(results[0].geometry.location);
-      marker.setMap(map);
+      homeMarker.setPosition(results[0].geometry.location);
+      homeMarker.setMap(map);
       return results;
     })
     .then((result) => {
+      const results = result;
       const lat = result[0].geometry.location.lat();
       const lng = result[0].geometry.location.lng();
       chargerLookup(lat, lng);
+      return results;
     })
     .catch((e) => {
       response.innerText = 'Please enter a valid address';
@@ -106,6 +116,38 @@ async function chargerLookup(lat, lng) {
     for (let i = 0; i < 10; i++) {
       chargers.push(res.data[i].AddressInfo);
     }
-    console.log(chargers);
+    placeChargerOnMap();
+    return chargers;
   }
+  return False;
+}
+
+function placeChargerOnMap() {
+  if (chargers) {
+    const image = {
+      url: '/static/images/bolt.png',
+      scaledSize: new google.maps.Size(25, 25),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(0, 0),
+    };
+
+    const shape = { coords: [1, 1, 1, 20, 18, 20, 18, 1], type: 'poly' };
+
+    for (let i = 0; i < chargers.length; i++) {
+      const charger = chargers[i];
+      chargerMarker = new google.maps.Marker({
+        position: {
+          lat: charger.Latitude,
+          lng: charger.Longitude,
+        },
+        map,
+        icon: image,
+        shape: shape,
+        title: charger.Title,
+        zIndex: i,
+      });
+      chargerMarker.setMap(map);
+    }
+  }
+  return chargers;
 }
