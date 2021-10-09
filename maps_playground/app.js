@@ -114,9 +114,10 @@ async function chargerLookup(lat, lng) {
   });
   if (res && res.data) {
     for (let i = 0; i < 10; i++) {
-      chargers.push(res.data[i].AddressInfo);
+      chargers.push(res.data[i]);
     }
     placeChargerOnMap();
+    createChargerCards();
     return chargers;
   }
   return False;
@@ -133,10 +134,8 @@ function placeChargerOnMap() {
 
     const shape = { coords: [1, 1, 1, 20, 18, 20, 18, 1], type: 'poly' };
 
-    console.log(chargers.length);
-
     for (let i = 0; i < chargers.length; i++) {
-      const charger = chargers[i];
+      const charger = chargers[i].AddressInfo;
       chargerMarker = new google.maps.Marker({
         position: {
           lat: charger.Latitude,
@@ -152,4 +151,26 @@ function placeChargerOnMap() {
     }
   }
   return chargers;
+}
+
+function createChargerCards() {
+  console.log('inside');
+  for (let i = 0; i < chargers.length; i++) {
+    const chargerAddress = chargers[i].AddressInfo;
+    const chargerConnection = chargers[i].Connections[0].ConnectionType;
+    $('#charger-cards').append(`      
+        <div class="col-4">
+            <div class="card-columns">'
+                <div class="card text-white bg-dark mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">${chargerAddress.Title}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${chargerAddress.AddressLine1}, ${chargerAddress.Town}, ${chargerAddress.StateOrProvince} ${chargerAddress.Postcode}</h6>
+                        <p class="card-text">${chargerConnection.FormalName}</p>
+                        <a href="#" class="btn btn-primary">Open</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `);
+  }
 }
