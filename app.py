@@ -1,17 +1,23 @@
 """RTC Front End App"""
 
-from flask import Flask, request, render_template, flash, redirect, session, g
+from flask import Flask, request, render_template, flash, redirect, make_response, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, Stations, Reviews, Tags, Station_Tags
 
+import requests
+
+from api import api_bp
+
 import os
+
 
 CURR_USER_KEY = 'curr_user'
 
 app = Flask(__name__, static_url_path='/static')
+app.register_blueprint(api_bp, url_prefix='/api')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 'postgresql:///rtc')
 
@@ -24,6 +30,7 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
+
 
 ##################################################
 # User signup/login/logout
@@ -110,6 +117,9 @@ def login():
 
     return render_template('users/login.html', form=form)
 
+########################################################
+# Charger routes
+
 
 @app.route('/search')
 def search():
@@ -120,6 +130,19 @@ def search():
         return redirect('/')
 
     return render_template('charge/search.html')
+
+
+@app.route('/charger/<int:charger_id>')
+def charger(charger_id):
+    """Render charger detail page"""
+
+    if not g.user:
+        flash('Access unauthorized.', 'danger')
+        return redirect('/')
+
+    r = requests.get(f'http://localhost:5000/api/stations/{charger_id}')
+
+    return r.content
 
 
 @app.route('/')

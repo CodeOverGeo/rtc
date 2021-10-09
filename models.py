@@ -69,11 +69,23 @@ class Stations(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
+    open_charge_id = db.Column(db.Integer, nullable=False)
+
     location = db.Column(db.Text, nullable=False)
 
     type = db.Column(db.Text, nullable=False)
 
     in_operation = db.Column(db.Boolean, nullable=False)
+
+    def serialize(self):
+        """Serialize Station instance to a dict"""
+        return {
+            'id': self.id,
+            'open_charge_id': self.open_charge_id,
+            'location': self.location,
+            'type': self.type,
+            'in_operation': self.in_operation,
+        }
 
 
 class Reviews(db.Model):

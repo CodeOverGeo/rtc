@@ -6,8 +6,8 @@ let homeMarker;
 let geocoder;
 let errorDiv;
 let response;
-let chargers = [];
-let chargerMarker;
+let stations = [];
+let stationMarker;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -54,7 +54,7 @@ function initMap() {
   homeMarker = new google.maps.Marker({
     map,
   });
-  chargerMarker = new google.maps.Marker({
+  stationMarker = new google.maps.Marker({
     map,
   });
 
@@ -73,7 +73,8 @@ function initMap() {
 
 function clear() {
   homeMarker.setMap(null);
-  chargers = [];
+  stations = [];
+  $('#station-cards').empty();
   errorDiv.style.display = 'none';
 }
 
@@ -92,7 +93,7 @@ function geocode(request) {
       const results = result;
       const lat = result[0].geometry.location.lat();
       const lng = result[0].geometry.location.lng();
-      chargerLookup(lat, lng);
+      stationLookup(lat, lng);
       return results;
     })
     .catch((e) => {
@@ -101,7 +102,7 @@ function geocode(request) {
     });
 }
 
-async function chargerLookup(lat, lng) {
+async function stationLookup(lat, lng) {
   const res = await axios.get('https://api.openchargemap.io/v3/poi/', {
     params: {
       output: 'json',
@@ -114,17 +115,17 @@ async function chargerLookup(lat, lng) {
   });
   if (res && res.data) {
     for (let i = 0; i < 10; i++) {
-      chargers.push(res.data[i]);
+      stations.push(res.data[i]);
     }
-    placeChargerOnMap();
-    createChargerCards();
-    return chargers;
+    placeStationOnMap();
+    createStationCards();
+    return stations;
   }
   return False;
 }
 
-function placeChargerOnMap() {
-  if (chargers) {
+function placeStationOnMap() {
+  if (stations) {
     const image = {
       url: '/static/images/bolt.png',
       scaledSize: new google.maps.Size(25, 25),
@@ -134,38 +135,38 @@ function placeChargerOnMap() {
 
     const shape = { coords: [1, 1, 1, 20, 18, 20, 18, 1], type: 'poly' };
 
-    for (let i = 0; i < chargers.length; i++) {
-      const charger = chargers[i].AddressInfo;
-      chargerMarker = new google.maps.Marker({
+    for (let i = 0; i < stations.length; i++) {
+      const station = stations[i].AddressInfo;
+      stationMarker = new google.maps.Marker({
         position: {
-          lat: charger.Latitude,
-          lng: charger.Longitude,
+          lat: station.Latitude,
+          lng: station.Longitude,
         },
         map,
         icon: image,
         shape: shape,
-        title: charger.Title,
+        title: station.Title,
         zIndex: i,
       });
-      chargerMarker.setMap(map);
+      stationMarker.setMap(map);
     }
   }
-  return chargers;
+  return stations;
 }
 
-function createChargerCards() {
+function createStationCards() {
   console.log('inside');
-  for (let i = 0; i < chargers.length; i++) {
-    const chargerAddress = chargers[i].AddressInfo;
-    const chargerConnection = chargers[i].Connections[0].ConnectionType;
-    $('#charger-cards').append(`      
+  for (let i = 0; i < stations.length; i++) {
+    const stationAddress = stations[i].AddressInfo;
+    const stationConnection = stations[i].Connections[0].ConnectionType;
+    $('#station-cards').append(`      
         <div class="col-4">
             <div class="card-columns">'
                 <div class="card text-white bg-dark mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">${chargerAddress.Title}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${chargerAddress.AddressLine1}, ${chargerAddress.Town}, ${chargerAddress.StateOrProvince} ${chargerAddress.Postcode}</h6>
-                        <p class="card-text">${chargerConnection.FormalName}</p>
+                        <h5 class="card-title">${stationAddress.Title}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${stationAddress.AddressLine1}, ${stationAddress.Town}, ${stationAddress.StateOrProvince} ${stationAddress.Postcode}</h6>
+                        <p class="card-text">${stationConnection.FormalName}</p>
                         <a href="#" class="btn btn-primary">Open</a>
                     </div>
                 </div>
