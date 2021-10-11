@@ -25,6 +25,9 @@ class User(db.Model):
     date_joined = db.Column(db.DateTime, nullable=False,
                             default=datetime.utcnow())
 
+    reviews = db.relationship('Review', backref='user',
+                              cascade='all, delete-orphan')
+
     @classmethod
     def signup(cls, username, email, password, date_joined):
         """Sign up user
@@ -62,7 +65,7 @@ class User(db.Model):
         return False
 
 
-class Stations(db.Model):
+class Station(db.Model):
     """Station model for rtc app"""
 
     __tablename__ = 'stations'
@@ -77,6 +80,8 @@ class Stations(db.Model):
 
     in_operation = db.Column(db.Boolean, nullable=False)
 
+    reviews = db.relationship('Review', backref='stations')
+
     def serialize(self):
         """Serialize Station instance to a dict"""
         return {
@@ -88,7 +93,7 @@ class Stations(db.Model):
         }
 
 
-class Reviews(db.Model):
+class Review(db.Model):
     """Reviews model for rtc app"""
 
     __tablename__ = 'reviews'
@@ -106,20 +111,23 @@ class Reviews(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    station_id = db.Column(db.Integer, db.ForeignKey(
+        'stations.id'), nullable=False)
+
     @property
-    def readable_date(self):
+    def readable_created_date(self):
         """Returns a user readable date"""
 
         return self.created_at.strftime('%a %b %d %Y, %I:%M %p')
 
     @property
-    def readable_date(self):
+    def readable_updated_date(self):
         """Returns a user readable date"""
 
         return self.updated_date.strftime('%a %b %d %Y, %I:%M %p')
 
 
-class Tags(db.Model):
+class Tag(db.Model):
     """Tag model for rtc app"""
 
     __tablename__ = 'tags'
@@ -129,7 +137,7 @@ class Tags(db.Model):
     tags = db.Column(db.String, nullable=False)
 
 
-class Station_Tags(db.Model):
+class Station_Tag(db.Model):
     """Station to Tag joining model"""
 
     __tablename__ = 'station_tags'

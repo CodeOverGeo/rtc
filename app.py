@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm
-from models import db, connect_db, User, Stations, Reviews, Tags, Station_Tags
+from models import db, connect_db, User, Station, Review, Tag, Station_Tag
 
 import requests
 
@@ -15,6 +15,8 @@ import os
 
 
 CURR_USER_KEY = 'curr_user'
+OPEN_MAP_API_KEY = 'e480c0a2-c3be-438b-90ea-db01e1d26c74'
+BASE_URL_OPEN_MAPS = 'https://api.openchargemap.io/v3/poi/'
 
 app = Flask(__name__, static_url_path='/static')
 app.register_blueprint(api_bp, url_prefix='/api')
@@ -29,6 +31,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
+# db.drop_all()
 db.create_all()
 
 
@@ -117,6 +120,16 @@ def login():
 
     return render_template('users/login.html', form=form)
 
+
+@app.route('/logout')
+def logout():
+    """Handle user logout"""
+
+    do_logout()
+
+    flash('Logout successful!', 'success')
+    return redirect('/login')
+
 ########################################################
 # Charger routes
 
@@ -132,17 +145,33 @@ def search():
     return render_template('charge/search.html')
 
 
-@app.route('/charger/<int:charger_id>')
+@app.route('/station/<int:charger_id>')
 def charger(charger_id):
     """Render charger detail page"""
 
     if not g.user:
         flash('Access unauthorized.', 'danger')
         return redirect('/')
+    try:
+        resp = requests.get(f'http://localhost:5000/api/stations/{charger_id}')
 
-    r = requests.get(f'http://localhost:5000/api/stations/{charger_id}')
+        if resp.status_code == 200:
+            render_template('charge/station.html')
+        elif resp.status_code == 204:
+            return ('WORKED')
+            # payload = {'output': 'json', 'chargepointid': charger_id,
+            #            'key': OPEN_MAP_API_KEY}
+            # resp = requests.get(
+            #     'https://api.openchargemap.io/v3/poi/', params=payload)
 
-    return r.content
+            # # import pdb
+            # # pdb.set_trace()
+            # return('WORKED')
+        else:
+            return 'KINDA FAILED'
+
+    finally:
+        return 'FAILED'
 
 
 @app.route('/')

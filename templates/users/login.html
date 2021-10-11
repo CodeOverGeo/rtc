@@ -9,9 +9,11 @@ block content %}
       {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
       'hidden' %} {% for error in field.errors %}
       <span class="text-danger">{{ error }}</span>
-      {% endfor %} {{ field(placeholder=field.label.text, class="form-control")
-      }} {% endfor %}
-
+      {% endfor %}
+      <p>
+        {{ field.label }}:{{ field(placeholder=field.label.text,
+        class="form-control") }} {% endfor %}
+      </p>
       <button class="btn btn-primary btn-block btn-lg">Log in</button>
     </form>
   </div>

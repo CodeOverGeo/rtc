@@ -1,5 +1,6 @@
 const OPEN_MAP_API_KEY = 'e480c0a2-c3be-438b-90ea-db01e1d26c74';
 const GOOGLE_MAP_API_KEY = 'AIzaSyDibstff_ItmrGuOHDU9ag28HY5VEcNts8';
+const BASE_URL_OPEN_MAPS = 'https://api.openchargemap.io/v3/poi/';
 
 let map;
 let homeMarker;
@@ -103,7 +104,7 @@ function geocode(request) {
 }
 
 async function stationLookup(lat, lng) {
-  const res = await axios.get('https://api.openchargemap.io/v3/poi/', {
+  const res = await axios.get(BASE_URL_OPEN_MAPS, {
     params: {
       output: 'json',
       countrycode: 'US',
@@ -120,6 +121,8 @@ async function stationLookup(lat, lng) {
     placeStationOnMap();
     createStationCards();
     return stations;
+  } else {
+    return;
   }
   return False;
 }

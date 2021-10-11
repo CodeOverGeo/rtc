@@ -13,7 +13,32 @@
     <link rel="stylesheet" href="/static/stylesheets/style.css" />
   </head>
   <body class="{% block body_class %}{% endblock %}">
-    <h1>Nav Bar placeholder</h1>
+    <nav
+      class="navbar navbar-expand navbar-light"
+      style="background-color: #0f992d"
+    >
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a href="/" class="navbar-brand">
+            <img
+              src="/static/images/rtclogo.png"
+              alt="logo"
+              id="logo"
+              class="d-inline-block align-text-top"
+            />
+            <span>RTC</span>
+          </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          {% if not g.user %}
+          <li><a class="nav-link" href="/signup">Sign up</a></li>
+          <li><a class="nav-link" href="/login">Log in</a></li>
+          {% else %}
+          <li><a class="nav-link" href="/logout">Log out</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
     <div class="container">
       {% for category, message in get_flashed_messages(with_categories=True) %}
       <div class="alert alert-{{ category }}">{{ message }}</div>

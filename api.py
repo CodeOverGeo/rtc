@@ -3,7 +3,7 @@
 from flask import request, jsonify, make_response, Blueprint
 
 
-from models import db, connect_db, User, Stations, Reviews, Tags, Station_Tags
+from models import db, connect_db, User, Station, Review, Tag, Station_Tag
 
 api_bp = Blueprint('api', __name__)
 
@@ -24,12 +24,23 @@ def get_stations(station_id):
     Returns data in JSON
     """
 
-    exists = db.session.query(Stations.id).filter_by(
+    # charger = Station(
+    #     open_charge_id=1,
+    #     location='home',
+    #     type="charger",
+    #     in_operation=True,
+    # )
+
+    # db.session.add(charger)
+    # db.session.commit()
+
+    exists = db.session.query(Station.id).filter_by(
         open_charge_id=station_id).first() is not None
     if exists:
-        station = Stations.query.filter_by(
+        station = Station.query.filter_by(
             open_charge_id=station_id).first_or_404()
         return jsonify(station=station.serialize())
+
     return '', 204
 
 
