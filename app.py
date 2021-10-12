@@ -156,17 +156,18 @@ def charger(charger_id):
         resp = requests.get(f'http://localhost:5000/api/stations/{charger_id}')
 
         if resp.status_code == 200:
-            render_template('charge/station.html')
+            response = resp.json()  # resp.data()
+            render_template('charge/station.html', station=response)
         elif resp.status_code == 204:
-            return ('WORKED')
-            # payload = {'output': 'json', 'chargepointid': charger_id,
-            #            'key': OPEN_MAP_API_KEY}
-            # resp = requests.get(
-            #     'https://api.openchargemap.io/v3/poi/', params=payload)
 
-            # # import pdb
-            # # pdb.set_trace()
-            # return('WORKED')
+            payload = {'output': 'json', 'chargepointid': charger_id,
+                       'key': OPEN_MAP_API_KEY}
+            resp = requests.get(
+                'https://api.openchargemap.io/v3/poi/', params=payload)
+            # resp.json(), resp.data()
+            # import pdb
+            # pdb.set_trace()
+            return('WORKED')
         else:
             return 'KINDA FAILED'
 

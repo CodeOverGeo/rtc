@@ -42,14 +42,3 @@ def get_stations(station_id):
         return jsonify(station=station.serialize())
 
     return '', 204
-
-
-# charger = Stations(
-#         open_charge_id=1,
-#         location='home',
-#         type="charger",
-#         in_operation=True,
-#     )
-
-#     db.session.add(charger)
-#     db.session.commit()

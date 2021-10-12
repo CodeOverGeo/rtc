@@ -9,6 +9,7 @@ let errorDiv;
 let response;
 let stations = [];
 let stationMarker;
+let stationMarkers = [];
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -55,9 +56,9 @@ function initMap() {
   homeMarker = new google.maps.Marker({
     map,
   });
-  stationMarker = new google.maps.Marker({
-    map,
-  });
+  // stationMarker = new google.maps.Marker({
+  //   map,
+  // });
 
   map.addListener('click', async (e) => {
     geocode({ location: e.latLng });
@@ -74,7 +75,9 @@ function initMap() {
 
 function clear() {
   homeMarker.setMap(null);
+  setMapOnAll(null);
   stations = [];
+  stationMarkers = [];
   $('#station-cards').empty();
   errorDiv.style.display = 'none';
 }
@@ -118,16 +121,15 @@ async function stationLookup(lat, lng) {
     for (let i = 0; i < 10; i++) {
       stations.push(res.data[i]);
     }
-    placeStationOnMap();
+    addStationtoArray();
     createStationCards();
     return stations;
   } else {
-    return;
+    return false;
   }
-  return False;
 }
 
-function placeStationOnMap() {
+function addStationtoArray() {
   if (stations) {
     const image = {
       url: '/static/images/bolt.png',
@@ -151,10 +153,17 @@ function placeStationOnMap() {
         title: station.Title,
         zIndex: i,
       });
-      stationMarker.setMap(map);
+      stationMarkers.push(stationMarker);
     }
+    setMapOnAll(map);
   }
   return stations;
+}
+
+function setMapOnAll(map) {
+  for (let i = 0; i < stationMarkers.length; i++) {
+    stationMarkers[i].setMap(map);
+  }
 }
 
 function createStationCards() {
