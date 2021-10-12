@@ -142,22 +142,48 @@ function addStationtoArray() {
 
     for (let i = 0; i < stations.length; i++) {
       const station = stations[i].AddressInfo;
-      stationMarker = new google.maps.Marker({
-        position: {
-          lat: station.Latitude,
-          lng: station.Longitude,
-        },
-        map,
-        icon: image,
-        shape: shape,
-        title: station.Title,
-        zIndex: i,
-      });
+      infoWindow(station);
+
       stationMarkers.push(stationMarker);
     }
     setMapOnAll(map);
   }
   return stations;
+}
+
+function infoWindow(station) {
+  const contentString =
+    '<div id="content">' +
+    '<div id="siteNotice">' +
+    '</div>' +
+    `<h1 id="firstHeading" class="firstHeading">${station.Title}</h1>` +
+    '<div id="bodyContent">' +
+    `<p>${station.AddressLine1}</p>` +
+    `<p>${station.Town}, ${station.StateOrProvince} ${station.Postcode}</p>` +
+    `<a href="station/${station.ID}" class="btn btn-primary">Open</a>`;
+  '</div>' + '</div>';
+  const infowindow = new google.maps.InfoWindow({
+    content: contentString,
+  });
+  stationMarker = new google.maps.Marker({
+    position: {
+      lat: station.Latitude,
+      lng: station.Longitude,
+    },
+    map,
+    icon: image,
+    shape: shape,
+    title: station.Title,
+    zIndex: i,
+  });
+
+  stationMarker.addListener('click', () => {
+    infowindowopen({
+      anchor: marker,
+      map,
+      shouldFocus: false,
+    });
+  });
 }
 
 function setMapOnAll(map) {
