@@ -142,7 +142,7 @@ function addStationtoArray() {
 
     for (let i = 0; i < stations.length; i++) {
       const station = stations[i].AddressInfo;
-      infoWindow(station);
+      infoWindow(station, image, shape, i);
 
       stationMarkers.push(stationMarker);
     }
@@ -151,7 +151,7 @@ function addStationtoArray() {
   return stations;
 }
 
-function infoWindow(station) {
+function infoWindow(station, image, shape, i) {
   const contentString =
     '<div id="content">' +
     '<div id="siteNotice">' +
@@ -178,8 +178,8 @@ function infoWindow(station) {
   });
 
   stationMarker.addListener('click', () => {
-    infowindowopen({
-      anchor: marker,
+    infowindow.open({
+      anchor: stationMarker,
       map,
       shouldFocus: false,
     });
