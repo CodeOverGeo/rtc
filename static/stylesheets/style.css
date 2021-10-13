@@ -1,6 +1,6 @@
 #map {
   height: 75vh;
-  width: 75vh;
+  width: 100%;
   margin: auto;
 }
 
@@ -11,21 +11,7 @@ body {
   padding: 0;
 }
 
-.home {
-  text-align: center;
-}
-
-#logo {
-  height: 35px;
-  width: 35px;
-}
-
-#home-logo {
-  height: 75px;
-  width: 75px;
-}
-
-.container {
+#container {
   height: 100%;
   width: 100%;
 }
@@ -36,7 +22,7 @@ input[type='password'] {
   border: 0;
   border-radius: 2px;
   box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-  margin: 10px 0px 10px 0px;
+  margin: 10px;
   padding: 0 0.5em;
   font: 400 18px Roboto, Arial, sans-serif;
   overflow: hidden;
@@ -103,4 +89,34 @@ input[type='button'].button-secondary:hover {
   overflow: hidden;
   padding: 1rem;
   font-size: medium;
+}
+
+#loading-bar-spinner.spinner {
+  left: 50%;
+  margin-left: -20px;
+  top: 50%;
+  margin-top: -20px;
+  position: absolute;
+  z-index: 19 !important;
+  animation: loading-bar-spinner 400ms linear infinite;
+}
+
+#loading-bar-spinner.spinner .spinner-icon {
+  width: 40px;
+  height: 40px;
+  border: solid 4px transparent;
+  border-top-color: #00c8b1 !important;
+  border-left-color: #00c8b1 !important;
+  border-radius: 50%;
+}
+
+@keyframes loading-bar-spinner {
+  0% {
+    transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }

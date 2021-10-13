@@ -107,6 +107,7 @@ function geocode(request) {
 }
 
 async function stationLookup(lat, lng) {
+  showLoadingView();
   const res = await axios.get(BASE_URL_OPEN_MAPS, {
     params: {
       output: 'json',
@@ -123,6 +124,7 @@ async function stationLookup(lat, lng) {
     }
     addStationtoArray();
     createStationCards();
+    hideLoadingView();
     return stations;
   } else {
     return false;
@@ -156,7 +158,7 @@ function infoWindow(station, image, shape, i) {
     '<div id="content">' +
     '<div id="siteNotice">' +
     '</div>' +
-    `<h1 id="firstHeading" class="firstHeading">${station.Title}</h1>` +
+    `<h3 id="firstHeading" class="firstHeading">${station.Title}</h3>` +
     '<div id="bodyContent">' +
     `<p>${station.AddressLine1}</p>` +
     `<p>${station.Town}, ${station.StateOrProvince} ${station.Postcode}</p>` +
@@ -212,4 +214,15 @@ function createStationCards() {
         </div>
         `);
   }
+}
+
+function showLoadingView() {
+  $('#loading').empty();
+  $('#loading').append(
+    '<div id="loading-bar-spinner" class="spinner"><div class="spinner-icon"></div></div>'
+  );
+}
+
+function hideLoadingView() {
+  $('#loading').empty();
 }
