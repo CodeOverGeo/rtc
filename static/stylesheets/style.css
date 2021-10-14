@@ -11,9 +11,23 @@ body {
   padding: 0;
 }
 
+.navbar {
+  background-color: #0f992d;
+}
+
 #container {
   height: 100%;
   width: 100%;
+}
+
+.home {
+  text-align: center;
+}
+
+#logo,
+#home-logo {
+  height: 75px;
+  width: 75px;
 }
 
 input[type='text'],
@@ -105,8 +119,8 @@ input[type='button'].button-secondary:hover {
   width: 40px;
   height: 40px;
   border: solid 4px transparent;
-  border-top-color: #00c8b1 !important;
-  border-left-color: #00c8b1 !important;
+  border-top-color: #0f992d !important;
+  border-left-color: #0f992d !important;
   border-radius: 50%;
 }
 

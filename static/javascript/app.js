@@ -112,14 +112,14 @@ async function stationLookup(lat, lng) {
     params: {
       output: 'json',
       countrycode: 'US',
-      maxresults: '10',
+      maxresults: '9',
       key: OPEN_MAP_API_KEY,
       latitude: lat,
       longitude: lng,
     },
   });
   if (res && res.data) {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < res.data.length; i++) {
       stations.push(res.data[i]);
     }
     addStationtoArray();
