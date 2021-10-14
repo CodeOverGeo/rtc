@@ -104,21 +104,24 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """Handle user login"""
+    if not g.user:
+        form = LoginForm()
 
-    form = LoginForm()
+        if form.validate_on_submit():
+            user = User.authenticate(form.username.data, form.password.data)
 
-    if form.validate_on_submit():
-        user = User.authenticate(form.username.data, form.password.data)
+            if user:
+                do_login(user)
+                flash(f"Welcome, {user.username}!", 'success')
+                return redirect('/search')
 
-        if user:
-            do_login(user)
-            flash(f"Welcome, {user.username}!", 'success')
-            return redirect('/search')
+            else:
+                flash('Username or password incorrect.', 'danger')
 
-        else:
-            flash('Username or password incorrect.', 'danger')
+        return render_template('users/login.html', form=form)
 
-    return render_template('users/login.html', form=form)
+    else:
+        return redirect('/search')
 
 
 @app.route('/logout')

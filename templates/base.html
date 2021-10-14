@@ -6,17 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rate The Charge</title>
 
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/bootstrap/dist/css/bootstrap.css"
-    />
+    <link rel="stylesheet" href="/static/stylesheets/bootstrap.css" />
     <link rel="stylesheet" href="/static/stylesheets/style.css" />
   </head>
   <body class="{% block body_class %}{% endblock %}">
-    <nav
-      class="navbar navbar-expand navbar-light"
-      style="background-color: #0f992d"
-    >
+    <nav class="navbar navbar-expand navbar-dark bg-primary">
       <div class="container-fluid">
         <div class="navbar-header">
           <a href="/" class="navbar-brand">
@@ -24,17 +18,21 @@
               src="/static/images/rtclogo.png"
               alt="logo"
               id="logo"
-              class="d-inline-block align-text-top"
+              class="d-inline-block align-text-middld"
             />
             <span>RTC</span>
           </a>
         </div>
         <ul class="nav navbar-nav navbar-right">
           {% if not g.user %}
-          <li><a class="nav-link" href="/signup">Sign up</a></li>
-          <li><a class="nav-link" href="/login">Log in</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/signup">Sign up</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/login">Log in</a></li>
           {% else %}
-          <li><a class="nav-link" href="/logout">Log out</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Log out</a>
+          </li>
           {% endif %}
         </ul>
       </div>
