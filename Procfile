@@ -1,1 +1,1 @@
-web: gunicorn rtc_app:app
+web: gunicorn app:app
