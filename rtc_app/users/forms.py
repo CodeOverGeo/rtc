@@ -16,9 +16,3 @@ class LoginForm(FlaskForm):
 
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=7)])
-
-
-class StationForm(FlaskForm):
-    """Form for searching for stations."""
-
-    address = StringField('Address', validators=[DataRequired()])
