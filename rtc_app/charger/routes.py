@@ -1,5 +1,6 @@
-from flask import render_template, flash, redirect, session, g, Blueprint
+from flask import render_template, flash, redirect, session, url_for, g, Blueprint
 from rtc_app.models import User
+from rtc_app.api.routes import get_stations
 import requests
 
 charger = Blueprint('charger', __name__)
@@ -28,30 +29,24 @@ def stations(charger_id):
     if not g.user:
         flash('Access unauthorized.', 'danger')
         return redirect('/')
-    try:
-        resp = requests.get(f'http://localhost:5000/api/stations/{charger_id}')
+    else:
 
-        if resp.status_code == 200:
-            response = resp.json()  # resp.data()
-            render_template('charge/station.html', station=response)
-        elif resp.status_code == 204:
+        resp = get_stations(charger_id)
 
+        if resp:
+            return render_template('charge/station.html', charger=resp)
+        else:
             payload = {'output': 'json', 'chargepointid': charger_id,
                        'key': OPEN_MAP_API_KEY}
             resp = requests.get(
                 'https://api.openchargemap.io/v3/poi/', params=payload)
-            # resp.json(), resp.data()
-            # import pdb
-            # pdb.set_trace()
+        # resp.json(), resp.data()
+        # import pdb
+        # pdb.set_trace()
             return('WORKED')
-        else:
-            return 'KINDA FAILED'
-
-    finally:
-        return 'FAILED'
 
 
-@charger.before_request
+@ charger.before_request
 def add_user_to_g():
     """If user is logged in, add curr user to Flask global."""
 
@@ -69,7 +64,7 @@ def add_user_to_g():
 #
 # https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
 
-@charger.after_request
+@ charger.after_request
 def add_header(req):
     """Add non-caching headers on every request."""
 

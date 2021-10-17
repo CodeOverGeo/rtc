@@ -74,7 +74,17 @@ class Station(db.Model):
 
     open_charge_id = db.Column(db.Integer, nullable=False)
 
-    location = db.Column(db.Text, nullable=False)
+    Title = db.Column(db.Text, nullable=False)
+
+    AddressLine1 = db.Column(db.Text, nullable=False)
+
+    Town = db.Column(db.Text, nullable=False)
+
+    StateOrProvince = db.Column(db.Text, nullable=False)
+
+    Postcode = db.Column(db.Integer, nullable=False)
+
+    FormalName = db.Column(db.Text, nullable=False)
 
     type = db.Column(db.Text, nullable=False)
 
@@ -127,27 +137,27 @@ class Review(db.Model):
         return self.updated_date.strftime('%a %b %d %Y, %I:%M %p')
 
 
-class Tag(db.Model):
-    """Tag model for rtc app"""
+# class Tag(db.Model):
+#     """Tag model for rtc app"""
 
-    __tablename__ = 'tags'
+#     __tablename__ = 'tags'
 
-    id = db.Column(db.Integer, primary_key=True)
+#     id = db.Column(db.Integer, primary_key=True)
 
-    tags = db.Column(db.String, nullable=False)
+#     tags = db.Column(db.String, nullable=False)
 
 
-class Station_Tag(db.Model):
-    """Station to Tag joining model"""
+# class Station_Tag(db.Model):
+#     """Station to Tag joining model"""
 
-    __tablename__ = 'station_tags'
+#     __tablename__ = 'station_tags'
 
-    id = db.Column(db.Integer, primary_key=True)
+#     id = db.Column(db.Integer, primary_key=True)
 
-    station_id = db.Column(db.Integer, db.ForeignKey(
-        'stations.id'), nullable=False)
+#     station_id = db.Column(db.Integer, db.ForeignKey(
+#         'stations.id'), nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
 
 def connect_db(app):

@@ -17,9 +17,6 @@ from rtc_app.models import db, connect_db, User
 CURR_USER_KEY = 'curr_user'
 
 
-BASE_URL_OPEN_MAPS = 'https://api.openchargemap.io/v3/poi/'
-
-
 def create_app(config_class=Config):
     app = Flask(__name__, static_url_path='/static')
     app.config.from_object(Config)
