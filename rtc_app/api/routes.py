@@ -2,9 +2,10 @@
 
 from flask import jsonify, make_response, Blueprint
 import requests
+from requests.exceptions import HTTPError
 
 
-from rtc_app.models import db, connect_db, User, Station, Review
+from rtc_app.models import db, User, Station, Review
 
 api_bp = Blueprint('api_bp', __name__)
 CURR_USER_KEY = 'curr_user'
@@ -38,13 +39,32 @@ def get_stations(station_id):
         return station
 
     else:
-        query = {'key': OPEN_MAP_API_KEY, 'chargepointid': station_id}
-        station = requests.get(BASE_URL_OPEN_MAPS, query)
-        response = station.json()
-        print('********************')
-        print(response)
-    return False
+        try:
+            query = {'key': OPEN_MAP_API_KEY, 'chargepointid': station_id}
+            response = requests.get(BASE_URL_OPEN_MAPS, query)
+            response.raise_for_status
+            data = response.json()
+            return post_station(data)
+        except HTTPError as http_err:
+            return (f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            return (f'Other error occurred: {err}')
 
 
-def post_station():
-    pass
+def post_station(data):
+    """Post new station onto database"""
+    station = data[0]
+    new_station = Station(
+        open_charge_id=station['AddressInfo']['ID'],
+        Title=station['AddressInfo']['Title'],
+        AddressLine1=station['AddressInfo']['AddressLine1'],
+        Town=station['AddressInfo']['Town'],
+        StateOrProvince=station['AddressInfo']['StateOrProvince'],
+        Postcode=station['AddressInfo']['Postcode'],
+        FormalName=station['Connections'][0]['ConnectionType']['FormalName'],
+        type=station['Connections'][0]['ConnectionType']['Title'],
+        in_operation=station['StatusType']['IsOperational'],)
+
+    db.session.add(new_station)
+    db.session.commit()
+    return new_station

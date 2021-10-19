@@ -4,10 +4,9 @@
     <div class="card-columns">'
         <div class="card text-white bg-dark mb-3">
             <div class="card-body">
-                <h5 class="card-title">${charger.Title}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">${stationAddress.AddressLine1}, ${stationAddress.Town}, ${stationAddress.StateOrProvince} ${stationAddress.Postcode}</h6>
-                <p class="card-text">${stationConnection.FormalName}</p>
-                <a href="station/${stationAddress.ID}" class="btn btn-primary">Open</a>
+                <h5 class="card-title">{{station.Title}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{station.AddressLine1}}, {{station.Town}}, {{station.StateOrProvince}} {{station.Postcode}}</h6>
+                <p class="card-text">{{station.FormalName}}</p>
             </div>
         </div>
     </div>

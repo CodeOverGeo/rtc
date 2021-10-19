@@ -1,11 +1,11 @@
 from flask import render_template, flash, redirect, session, url_for, g, Blueprint
-from rtc_app.models import User
+from rtc_app.models import Station, User
 from rtc_app.api.routes import get_stations
 import requests
 
 charger = Blueprint('charger', __name__)
 CURR_USER_KEY = 'curr_user'
-OPEN_MAP_API_KEY = 'e480c0a2-c3be-438b-90ea-db01e1d26c74'
+
 
 ########################################################
 # Charger routes
@@ -30,20 +30,13 @@ def stations(charger_id):
         flash('Access unauthorized.', 'danger')
         return redirect('/')
     else:
+        station = get_stations(charger_id)
+        return render_template('charge/station.html', station=station)
 
-        resp = get_stations(charger_id)
-
-        if resp:
-            return render_template('charge/station.html', charger=resp)
-        else:
-            payload = {'output': 'json', 'chargepointid': charger_id,
-                       'key': OPEN_MAP_API_KEY}
-            resp = requests.get(
-                'https://api.openchargemap.io/v3/poi/', params=payload)
         # resp.json(), resp.data()
         # import pdb
         # pdb.set_trace()
-            return('WORKED')
+        return('WORKED')
 
 
 @ charger.before_request
