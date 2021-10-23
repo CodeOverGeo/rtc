@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, g, Blueprint
-from rtc_app.models import Station, User
+from rtc_app.models import Review, Station, User, db
 from rtc_app.api.routes import get_stations
+from rtc_app.charger.forms import ReviewForm
 import requests
 
 charger = Blueprint('charger', __name__)
@@ -30,13 +31,35 @@ def stations(charger_id):
         flash('Access unauthorized.', 'danger')
         return redirect('/')
     else:
-        station = get_stations(charger_id)
-        return render_template('charge/station.html', station=station)
+        form = ReviewForm()
 
-        # resp.json(), resp.data()
-        # import pdb
-        # pdb.set_trace()
-        return('WORKED')
+        station = get_stations(charger_id)
+        return render_template('charge/station.html', station=station, form=form)
+
+
+@charger.route('/station/<int:charger_id>/reviews/add', methods=['POST'])
+def add_comment(charger_id):
+    """Add a review for a specific charging station
+
+    If valid, update review and redirect to station page"""
+
+    if not g.user:
+        flash('Access unauthorized.', 'danger')
+        return redirect('/')
+
+    form = ReviewForm()
+
+    if form.validate_on_submit():
+        review = Review(score=form.score.data,
+                        post=form.post.data,
+                        user_id=g.user.id,
+                        station_id=charger_id)
+        db.session.add(review)
+        db.session.commit()
+
+        return redirect(f'station/{review.station.open_charge_id}')
+
+    return redirect('/search')
 
 
 @ charger.before_request

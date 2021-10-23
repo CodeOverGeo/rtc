@@ -55,7 +55,7 @@ def post_station(data):
     """Post new station onto database"""
     station = data[0]
     new_station = Station(
-        open_charge_id=station['AddressInfo']['ID'],
+        open_charge_id=station['ID'],
         Title=station['AddressInfo']['Title'],
         AddressLine1=station['AddressInfo']['AddressLine1'],
         Town=station['AddressInfo']['Town'],

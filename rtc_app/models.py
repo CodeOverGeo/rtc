@@ -92,6 +92,8 @@ class Station(db.Model):
 
     reviews = db.relationship('Review', backref='stations')
 
+    db.UniqueConstraint(open_charge_id)
+
     def serialize(self):
         """Serialize Station instance to a dict"""
         return {
@@ -122,7 +124,7 @@ class Review(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     station_id = db.Column(db.Integer, db.ForeignKey(
-        'stations.id'), nullable=False)
+        'stations.open_charge_id'), nullable=False)
 
     @property
     def readable_created_date(self):

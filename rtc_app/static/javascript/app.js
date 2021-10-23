@@ -14,7 +14,7 @@ let stationMarkers = [];
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 10,
-    center: { lat: -34.397, lng: 150.644 },
+    center: { lat: 40.7484, lng: -73.9857 },
     mapTypeControl: false,
   });
   geocoder = new google.maps.Geocoder();
@@ -66,6 +66,12 @@ function initMap() {
   submitButton.addEventListener('click', () =>
     geocode({ address: inputText.value })
   );
+
+  // inputText.addEventListener('keyup', (event) => {
+  //   if (event.key === 'Enter') {
+  //     geocode({ address: inputText.value });
+  //   }
+  // });
 
   clearButton.addEventListener('click', () => {
     clear();
@@ -144,7 +150,8 @@ function addStationtoArray() {
 
     for (let i = 0; i < stations.length; i++) {
       const station = stations[i].AddressInfo;
-      infoWindow(station, image, shape, i);
+      const id = stations[i].ID;
+      infoWindow(station, image, shape, id, i);
 
       stationMarkers.push(stationMarker);
     }
@@ -153,7 +160,7 @@ function addStationtoArray() {
   return stations;
 }
 
-function infoWindow(station, image, shape, i) {
+function infoWindow(station, image, shape, id, i) {
   const contentString =
     '<div id="content">' +
     '<div id="siteNotice">' +
@@ -162,7 +169,7 @@ function infoWindow(station, image, shape, i) {
     '<div id="bodyContent">' +
     `<p>${station.AddressLine1}</p>` +
     `<p>${station.Town}, ${station.StateOrProvince} ${station.Postcode}</p>` +
-    `<a href="station/${station.ID}" class="btn btn-primary">Open</a>`;
+    `<a href="station/${id}" class="btn btn-primary">Open</a>`;
   '</div>' + '</div>';
   const infowindow = new google.maps.InfoWindow({
     content: contentString,
@@ -195,10 +202,10 @@ function setMapOnAll(map) {
 }
 
 function createStationCards() {
-  console.log('inside');
   for (let i = 0; i < stations.length; i++) {
     const stationAddress = stations[i].AddressInfo;
     const stationConnection = stations[i].Connections[0].ConnectionType;
+    const id = stations[i].ID;
     $('#station-cards').append(`      
         <div class="col-4">
             <div class="card-columns">'
@@ -207,7 +214,7 @@ function createStationCards() {
                         <h5 class="card-title">${stationAddress.Title}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">${stationAddress.AddressLine1}, ${stationAddress.Town}, ${stationAddress.StateOrProvince} ${stationAddress.Postcode}</h6>
                         <p class="card-text">${stationConnection.FormalName}</p>
-                        <a href="station/${stationAddress.ID}" class="btn btn-primary">Open</a>
+                        <a href="station/${id}" class="btn btn-primary">Open</a>
                     </div>
                 </div>
             </div>

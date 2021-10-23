@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
-<div><p><div class="col-4">
+<div><p><div class="row justify-content-md-center">
     <div class="card-columns">'
         <div class="card text-white bg-dark mb-3">
             <div class="card-body">
@@ -10,6 +10,48 @@
             </div>
         </div>
     </div>
-</div></p></div>
+</div></p>
+<p>
+    <div class='col-sm-6'>
+        <ul class='list-group'>
+            {% for review in station.review %}
+                <li class="list-group-item">
+                    {{ review }}
+                </li>
+            {% endfor %} 
+        </ul>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-4">
+            <h2>
+                Submit Rating
+            </h2>
+            <form method="post" action="/station/{{ station.open_charge_id }}/reviews/add">
+                {{ form.hidden_tag() }}
+                    {% for field in form if field.widget.input_type != 'hidden' %}
+                        {% for error in field.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    {% endfor %}
+                    <div class="rating-wrapper">
+                        <img id="1" src="/static/images/star.png" width="20">
+                        <img id="2" src="/static/images/star.png" width="20">
+                        <img id="3" src="/static/images/star.png" width="20">
+                        <img id="4" src="/static/images/star.png" width="20">
+                        <img id="5" src="/static/images/star.png" width="20">
+                    </div>
+                       
+                    {{ form.score(id="rating", class="form-control") }}
+                    <h4>{{ form.post.label }}:</h4>
+                    {{ form.post(class="form-control") }}
+                    
+                    <button type="submit" class="btn btn-success">Submit Rating</button>
+                    <a href="/search" class="btn btn-outline-secondary">Cancel</a>
+                    
+            </form>
+        </div>
+    </div>
 
+</p></div>
+<script src="/static/javascript/star.js"></script>
 {% endblock %}
