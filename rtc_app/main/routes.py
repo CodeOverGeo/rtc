@@ -1,17 +1,9 @@
-from flask import render_template, session, g, Blueprint
+from flask import render_template, redirect, session, g, Blueprint
 from rtc_app.models import User
 
 main = Blueprint('main', __name__)
 
 CURR_USER_KEY = 'curr_user'
-
-
-@main.route('/')
-@main.route('/home')
-def homepage():
-    """Root route redirects to Homepage"""
-
-    return render_template('home.html')
 
 
 @main.before_request
@@ -25,12 +17,23 @@ def add_user_to_g():
         g.user = None
 
 
+@main.route('/')
+@main.route('/home')
+def homepage():
+    """Root route redirects to Homepage"""
+
+    if not g.user:
+        return render_template('home.html')
+
+    else:
+        return redirect('/search')
 ##############################################################################
 # Turn off all caching in Flask
 #   (useful for dev; in production, this kind of stuff is typically
 #   handled elsewhere)
 #
 # https://stackoverflow.com/questions/34066804/disabling-caching-in-flask
+
 
 @main.after_request
 def add_header(req):

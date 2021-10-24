@@ -67,11 +67,11 @@ function initMap() {
     geocode({ address: inputText.value })
   );
 
-  // inputText.addEventListener('keyup', (event) => {
-  //   if (event.key === 'Enter') {
-  //     geocode({ address: inputText.value });
-  //   }
-  // });
+  inputText.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+      geocode({ address: inputText.value });
+    }
+  });
 
   clearButton.addEventListener('click', () => {
     clear();

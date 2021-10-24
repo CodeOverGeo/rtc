@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, HiddenField
-from wtforms.validators import DataRequired, InputRequired, Email, Length
+from wtforms import StringField, HiddenField
+from wtforms.validators import DataRequired, InputRequired
 
 
 class StationForm(FlaskForm):

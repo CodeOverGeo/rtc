@@ -1,5 +1,6 @@
 """Flask app for RTC API"""
 
+from pdb import set_trace
 from flask import jsonify, make_response, Blueprint
 import requests
 from requests.exceptions import HTTPError
@@ -34,12 +35,14 @@ def get_stations(station_id):
     exists = db.session.query(Station.id).filter_by(
         open_charge_id=station_id).first() is not None
     if exists:
+
         station = Station.query.filter_by(
             open_charge_id=station_id).first_or_404()
         return station
 
     else:
         try:
+            print('*************inside')
             query = {'key': OPEN_MAP_API_KEY, 'chargepointid': station_id}
             response = requests.get(BASE_URL_OPEN_MAPS, query)
             response.raise_for_status
@@ -53,7 +56,9 @@ def get_stations(station_id):
 
 def post_station(data):
     """Post new station onto database"""
+    print('*******************posting new station')
     station = data[0]
+
     new_station = Station(
         open_charge_id=station['ID'],
         Title=station['AddressInfo']['Title'],
@@ -61,10 +66,11 @@ def post_station(data):
         Town=station['AddressInfo']['Town'],
         StateOrProvince=station['AddressInfo']['StateOrProvince'],
         Postcode=station['AddressInfo']['Postcode'],
-        FormalName=station['Connections'][0]['ConnectionType']['FormalName'],
-        type=station['Connections'][0]['ConnectionType']['Title'],
-        in_operation=station['StatusType']['IsOperational'],)
+        FormalName=station['Connections'][0]['ConnectionType']['FormalName'] or 'Unknown',
+        type=station['Connections'][0]['ConnectionType']['Title'] or 'Unknown',)
 
     db.session.add(new_station)
     db.session.commit()
+
+    print('**********************set trace')
     return new_station

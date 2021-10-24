@@ -88,8 +88,6 @@ class Station(db.Model):
 
     type = db.Column(db.Text, nullable=False)
 
-    in_operation = db.Column(db.Boolean, nullable=False)
-
     reviews = db.relationship('Review', backref='stations')
 
     db.UniqueConstraint(open_charge_id)
