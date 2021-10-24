@@ -49,9 +49,6 @@ def add_comment(charger_id):
 
     form = ReviewForm()
 
-    import pdb
-    pdb.set_trace()
-
     if form.validate_on_submit():
         print('**********************inside')
         review = Review(score=form.score.data,
