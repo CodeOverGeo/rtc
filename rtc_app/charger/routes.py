@@ -34,6 +34,7 @@ def stations(charger_id):
         form = ReviewForm()
 
         station = get_stations(charger_id)
+
         return render_template('charge/station.html', station=station, form=form)
 
 
@@ -59,7 +60,7 @@ def add_comment(charger_id):
         db.session.commit()
 
         print(f'****************{review.stations.open_charge_id}')
-        return redirect(f'station/{review.stations.open_charge_id}')
+        return redirect(f'/station/{review.stations.open_charge_id}')
 
     return redirect('/search')
 

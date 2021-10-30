@@ -14,10 +14,17 @@
 <p>
     <div class='col-sm-6'>
         <ul class='list-group'>
-            {% for review in station.review %}
+            {% for review in station.reviews %}
                 <li class="list-group-item">
-                    {{ review }}
+                    {{ review.post }}
+                    <br>
+                    Rating: {{ review.score }}
+                    <br>
+                    -By {{ review.user.username }}
+                    <br>
+                    {{ review.readable_created_date }}
                 </li>
+                
             {% endfor %} 
         </ul>
     </div>
