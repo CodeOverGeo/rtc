@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block content %}
+<h1>{{ user.username }}</h1>
+<div>
+    <div>Username:</div>
+    <div>{{ user.username }}</div>
+    <div>Email:</div>
+    <div>{{ user.email }}</div>
+</div>
+
+<div>
+    <button class="btn btn-danger" form action="/users/{{ user.id }}/delete" formmethod="POST">DELETE {{ user.username }}</form>
+</div>
+
+{% endblock %}

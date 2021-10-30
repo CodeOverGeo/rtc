@@ -30,7 +30,9 @@
           </li>
           <li class="nav-item"><a class="nav-link" href="/login">Log in</a></li>
           {% else %}
+
           <li class="nav-item">
+            <a class="nav-link" href="/users/{{ g.user.id }}">Account</a>
             <a class="nav-link" href="/logout">Log out</a>
           </li>
           {% endif %}

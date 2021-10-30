@@ -84,6 +84,36 @@ def logout():
     return redirect('/login')
 
 
+@users.route('/users/<int:user_id>')
+def user(user_id):
+    """Show user profile page."""
+
+    if not g.user:
+        flash('Access unauthorized.', 'danger')
+        return redirect('/')
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template('/users/show.html', user=user)
+
+
+@users.route('/users/<int:user_id>/delete', methods=['POST'])
+def delete_user(user_id):
+    """Delete user"""
+
+    if not g.user or g.user.id != user_id:
+        flash('Access unauthorized.', 'danger')
+        return redirect('/')
+
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    do_logout()
+
+    return redirect('/')
+
+
 @users.before_request
 def add_user_to_g():
     """If user is logged in, add curr user to Flask global."""
