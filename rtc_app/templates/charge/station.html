@@ -26,8 +26,8 @@
             <h2>
                 Submit Rating
             </h2>
-            <form method="post" action="/station/{{ station.open_charge_id }}/reviews/add">
-                {{ form.hidden_tag() }}
+            <form method="POST" action="/station/{{ station.open_charge_id }}/reviews/add">
+                {{ form.csrf_token }}
                     {% for field in form if field.widget.input_type != 'hidden' %}
                         {% for error in field.errors %}
                             <span class="text-danger">{{ error }}</span>

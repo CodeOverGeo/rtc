@@ -58,7 +58,8 @@ def add_comment(charger_id):
         db.session.add(review)
         db.session.commit()
 
-        return redirect(f'station/{review.station.open_charge_id}')
+        print(f'****************{review.stations.open_charge_id}')
+        return redirect(f'station/{review.stations.open_charge_id}')
 
     return redirect('/search')
 
