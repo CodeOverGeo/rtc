@@ -8,7 +8,10 @@
 </div>
 
 <div>
-    <button class="btn btn-danger" form action="/users/{{ user.id }}/delete" formmethod="POST">DELETE {{ user.username }}</form>
+    <form action="/users/{{ user.id }}/delete" method="POST">
+        <button class="btn btn-danger">DELETE {{ user.username }}
+    </form>
+    
 </div>
 
 {% endblock %}
