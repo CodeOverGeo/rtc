@@ -51,15 +51,12 @@ def add_comment(charger_id):
     form = ReviewForm()
 
     if form.validate_on_submit():
-        print('**********************inside')
         review = Review(score=form.score.data,
                         post=form.post.data,
                         user_id=g.user.id,
                         station_id=charger_id)
         db.session.add(review)
         db.session.commit()
-
-        print(f'****************{review.stations.open_charge_id}')
         return redirect(f'/station/{review.stations.open_charge_id}')
 
     return redirect('/search')

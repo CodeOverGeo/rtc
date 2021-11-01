@@ -135,6 +135,8 @@ input[type='button'].button-secondary:hover {
   }
 }
 
+/* Rating css for stars */
+
 .rating-wrapper img {
   filter: invert(99%) sepia(1%) saturate(0%) hue-rotate(161deg) brightness(101%)
     contrast(104%);
@@ -143,4 +145,9 @@ input[type='button'].button-secondary:hover {
 
 .rating-checked {
   filter: none !important;
+}
+
+/* Need rating field to be invisible but exist in order to ensure form doesn't submit */
+#rating {
+  visibility: hidden;
 }

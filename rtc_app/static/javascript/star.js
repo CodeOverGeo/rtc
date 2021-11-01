@@ -13,3 +13,7 @@ function updateStarRating(evt) {
   }
   document.querySelector('#rating').value = evt.target.id;
 }
+
+// document
+//   .querySelector('#rating-form')
+//   .addEventListener('click', function () {});

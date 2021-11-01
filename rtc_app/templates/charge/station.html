@@ -33,20 +33,21 @@
             <h2>
                 Submit Rating
             </h2>
-            <form method="POST" action="/station/{{ station.open_charge_id }}/reviews/add">
+            <div class="rating-wrapper">
+                <img id="1" src="/static/images/star.png" width="20">
+                <img id="2" src="/static/images/star.png" width="20">
+                <img id="3" src="/static/images/star.png" width="20">
+                <img id="4" src="/static/images/star.png" width="20">
+                <img id="5" src="/static/images/star.png" width="20">
+            </div>
+            <form method="POST" id='rating-form' action="/station/{{ station.open_charge_id }}/reviews/add">
                 {{ form.csrf_token }}
                     {% for field in form if field.widget.input_type != 'hidden' %}
                         {% for error in field.errors %}
                             <span class="text-danger">{{ error }}</span>
                         {% endfor %}
                     {% endfor %}
-                    <div class="rating-wrapper">
-                        <img id="1" src="/static/images/star.png" width="20">
-                        <img id="2" src="/static/images/star.png" width="20">
-                        <img id="3" src="/static/images/star.png" width="20">
-                        <img id="4" src="/static/images/star.png" width="20">
-                        <img id="5" src="/static/images/star.png" width="20">
-                    </div>
+                    
                        
                     {{ form.score(id="rating", class="form-control") }}
                     <h4>{{ form.post.label }}:</h4>
