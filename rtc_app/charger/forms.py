@@ -14,6 +14,6 @@ class StationForm(FlaskForm):
 class ReviewForm(FlaskForm):
     """Form for adding review for station"""
 
-    score = IntegerField('rating',
-                         validators=[InputRequired(), NumberRange(min=1, max=5, message="Please select a rating")])
+    score = HiddenField('rating', default=5,
+                        validators=[InputRequired()])
     post = StringField('Comment', validators=[InputRequired()])

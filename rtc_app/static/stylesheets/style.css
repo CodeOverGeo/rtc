@@ -148,6 +148,3 @@ input[type='button'].button-secondary:hover {
 }
 
 /* Need rating field to be invisible but exist in order to ensure form doesn't submit */
-#rating {
-  visibility: hidden;
-}

@@ -1,3 +1,5 @@
+// Loop through stars on page and use ID to drop in value to form input
+
 document
   .querySelector('.rating-wrapper')
   .addEventListener('click', updateStarRating, false);

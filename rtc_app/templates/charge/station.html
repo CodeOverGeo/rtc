@@ -34,11 +34,11 @@
                 Submit Rating
             </h2>
             <div class="rating-wrapper">
-                <img id="1" src="/static/images/star.png" width="20">
-                <img id="2" src="/static/images/star.png" width="20">
-                <img id="3" src="/static/images/star.png" width="20">
-                <img id="4" src="/static/images/star.png" width="20">
-                <img id="5" src="/static/images/star.png" width="20">
+                <img id="1" class='rating-checked' src="/static/images/star.png" width="20">
+                <img id="2" class='rating-checked' src="/static/images/star.png" width="20">
+                <img id="3" class='rating-checked' src="/static/images/star.png" width="20">
+                <img id="4" class='rating-checked' src="/static/images/star.png" width="20">
+                <img id="5" class='rating-checked' src="/static/images/star.png" width="20">
             </div>
             <form method="POST" id='rating-form' action="/station/{{ station.open_charge_id }}/reviews/add">
                 {{ form.csrf_token }}
