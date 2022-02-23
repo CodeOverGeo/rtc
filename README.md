@@ -36,7 +36,7 @@
 
 This is a project build in collaboration with Springboard's Software Career Track Bootcamp.
 
-With electric cars becoming more popular and electric charging stations being build across the US, a need has developed to comment on the experiences at those charging stations and "rate the charge". This web app captures comments and ratings from 1-5 for charging stations across the US.
+With electric cars becoming more popular and electric charging stations being built across the US, a need has developed to comment on the experiences at those charging stations and "rate the charge". This web app captures comments and ratings from 1-5 for charging stations across the US.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
